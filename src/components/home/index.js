@@ -1,7 +1,8 @@
+// React/redux
 import React from 'react';
+import { connect } from 'react-redux';
 
 // Material imports
-import { makeStyles } from '@material-ui/core/styles';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,36 +11,36 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import TextField from '@material-ui/core/TextField';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-const drawerWidth = 240;
+// Custom
+import { addMessage } from './actions';
+import useStyles from './styles';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex'
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0
-  },
-  drawerPaper: {
-    width: drawerWidth
-  },
-  drawerContainer: {
-    overflow: 'auto'
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3)
-  }
-}));
-
-const Home = () => {
+const Message = ({ message }) => {
   const classes = useStyles();
+  return (
+    <div className={[message.author === 'me' ? classes.ownMessage : classes.otherMessage, classes.message].join(' ')}>
+      {message.message}
+    </div>
+  );
+};
+
+const Home = (props) => {
+  const classes = useStyles();
+  const { data, dispatch } = props;
+  let textInput = '';
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    dispatch(addMessage({ author: 'me', message: textInput }));
+  };
+
+  const onChangeTextField = (e) => {
+    textInput = e.target.value;
+  };
 
   return (
     <div className={classes.root}>
@@ -72,9 +73,18 @@ const Home = () => {
           </List>
         </div>
       </Drawer>
-      <main className={classes.content} />
+      <main className={classes.content}>
+        <div className={classes.list}>
+          {data.map((item) => <Message message={item} />)}
+        </div>
+        <form noValidate autoComplete="off" onSubmit={onSubmit}>
+          <TextField id="textfield" label="Votre message ..." variant="outlined" fullWidth onChange={onChangeTextField} />
+        </form>
+      </main>
     </div>
   );
 };
 
-export default Home;
+const mapToProps = (store) => ({ data: store.data });
+
+export default connect(mapToProps)(Home);

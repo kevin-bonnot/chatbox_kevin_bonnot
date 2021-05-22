@@ -1,3 +1,5 @@
 import { combineReducers } from 'redux';
 
-export default combineReducers({});
+import data from './components/home/reducer';
+
+export default combineReducers({ data });
