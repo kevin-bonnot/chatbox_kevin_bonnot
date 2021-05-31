@@ -1,7 +1,8 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const drawerWidth = 240;
-const foorerHeight = 75;
+const footerHeight = 75;
+const appBarHeight = 60;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -9,7 +10,8 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh'
   },
   appBar: {
-    zIndex: theme.zIndex.drawer + 1
+    zIndex: theme.zIndex.drawer + 1,
+    height: appBarHeight
   },
   drawer: {
     width: drawerWidth,
@@ -26,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     flexGrow: 1,
     padding: theme.spacing(3),
+    paddingTop: appBarHeight + theme.spacing(3),
     offset: theme.mixins.toolbar,
     display: 'flex',
     flexDirection: 'column',
@@ -34,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   list: {
     display: 'flex',
     flexDirection: 'column',
-    paddingBottom: foorerHeight
+    paddingBottom: footerHeight
 
   },
   ownMessage: {
@@ -60,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   },
   footer: {
     backgroundColor: '#FAFAFA',
-    height: foorerHeight,
+    height: footerHeight,
     position: 'fixed',
     bottom: 0,
     width: '100%',
