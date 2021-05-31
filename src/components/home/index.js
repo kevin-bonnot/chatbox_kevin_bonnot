@@ -19,6 +19,8 @@ import Typography from '@material-ui/core/Typography';
 import { addMessage } from './actions';
 import useStyles from './styles';
 import { getPokemon, helpPokebot } from './bots/pokebot';
+import { helpJot, randomJoke } from './bots/jot';
+import { helpBot, doSomething } from './bots/bot';
 
 const Message = ({ message }) => {
   const classes = useStyles();
@@ -58,9 +60,17 @@ const Home = (props) => {
       switch (textSplit[0]) {
         case 'help':
           helpPokebot(dispatch);
+          helpJot(dispatch);
+          helpBot(dispatch);
           break;
         case 'pokemon':
           getPokemon(textSplit, dispatch);
+          break;
+        case 'randomJoke':
+          randomJoke(dispatch);
+          break;
+        case 'doSomething':
+          doSomething(dispatch);
           break;
         default:
           break;
