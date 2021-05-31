@@ -1,6 +1,6 @@
 // React/redux
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useRef, useCallback } from 'react';
+import { useSelector, connect } from 'react-redux';
 
 // Material imports
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -18,24 +18,65 @@ import Typography from '@material-ui/core/Typography';
 // Custom
 import { addMessage } from './actions';
 import useStyles from './styles';
+import { getPokemon, helpPokebot } from './bots/pokebot';
 
 const Message = ({ message }) => {
   const classes = useStyles();
+  if (!message.imageURL) {
+    return (
+      <div className={[message.authorId === 0 ? classes.ownMessage : classes.otherMessage, classes.message].join(' ')}>
+        {message.message}
+      </div>
+    );
+  }
   return (
-    <div className={[message.author === 'me' ? classes.ownMessage : classes.otherMessage, classes.message].join(' ')}>
+    <div className={[message.authorId === 0 ? classes.ownMessage : classes.otherMessage, classes.message].join(' ')}>
       {message.message}
+      <img className={classes.messageImage} src={message.imageURL} alt="Message" />
     </div>
   );
 };
 
 const Home = (props) => {
+  const bottomRef = useRef(null);
   const classes = useStyles();
-  const { data, dispatch } = props;
+  const { history, contacts } = useSelector((state) => state.data);
+  const { dispatch } = props;
   let textInput = '';
+
+  const scroll = () => {
+    bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scroll();
+  }, [history]);
+
+  const botActions = useCallback((message) => {
+    const textSplit = message.message.split(' ');
+    if (message.authorId === 0) {
+      switch (textSplit[0]) {
+        case 'help':
+          helpPokebot(dispatch);
+          break;
+        case 'pokemon':
+          getPokemon(textSplit, dispatch);
+          break;
+        default:
+          break;
+      }
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    botActions(history[history.length - 1]);
+  }, [botActions, history]);
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(addMessage({ author: 'me', message: textInput }));
+    if (textInput !== '') {
+      dispatch(addMessage({ authorId: 0, message: textInput }));
+    }
   };
 
   const onChangeTextField = (e) => {
@@ -44,7 +85,6 @@ const Home = (props) => {
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" noWrap>
@@ -52,6 +92,7 @@ const Home = (props) => {
           </Typography>
         </Toolbar>
       </AppBar>
+      <CssBaseline />
       <Drawer
         className={classes.drawer}
         variant="permanent"
@@ -62,22 +103,21 @@ const Home = (props) => {
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
-            <ListItem button key="first">
-              <ListItemIcon><AccountCircleIcon /></ListItemIcon>
-              <ListItemText primary="Premier contact" />
-            </ListItem>
-            <ListItem button key="second">
-              <ListItemIcon><AccountCircleIcon /></ListItemIcon>
-              <ListItemText primary="Deuxième contact" />
-            </ListItem>
+            {contacts.map((contact) => (
+              <ListItem button key={contact.id}>
+                <ListItemIcon><AccountCircleIcon /></ListItemIcon>
+                <ListItemText primary={contact.name} />
+              </ListItem>
+            ))}
           </List>
         </div>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.list}>
-          {data.map((item) => <Message message={item} />)}
+          {history.map((item) => <Message message={item} />)}
         </div>
-        <form noValidate autoComplete="off" onSubmit={onSubmit}>
+        <div ref={bottomRef} />
+        <form noValidate autoComplete="off" onSubmit={onSubmit} className={classes.footer}>
           <TextField id="textfield" label="Votre message ..." variant="outlined" fullWidth onChange={onChangeTextField} />
         </form>
       </main>
