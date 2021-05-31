@@ -19,7 +19,7 @@ import Typography from '@material-ui/core/Typography';
 import { addMessage } from './actions';
 import useStyles from './styles';
 import { getPokemon, helpPokebot } from './bots/pokebot';
-import { helpJot, randomJoke } from './bots/jot';
+import { helpJot, randomChuckFact } from './bots/jot';
 import { helpBot, doSomething } from './bots/bot';
 
 const Message = ({ message }) => {
@@ -66,8 +66,8 @@ const Home = (props) => {
         case 'pokemon':
           getPokemon(textSplit, dispatch);
           break;
-        case 'randomJoke':
-          randomJoke(dispatch);
+        case 'fact':
+          randomChuckFact(dispatch);
           break;
         case 'doSomething':
           doSomething(dispatch);

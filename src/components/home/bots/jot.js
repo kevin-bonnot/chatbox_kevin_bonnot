@@ -1,4 +1,4 @@
-// import axios from 'axios';
+import axios from 'axios';
 import { addMessage } from '../actions';
 
 const authorId = 2;
@@ -11,10 +11,13 @@ export function helpJot(dispatch) {
   dispatch(addMessage(newMessage));
 }
 
-export function randomJoke(dispatch) {
-  const newMessage = {
-    authorId,
-    message: 'Ceci est une blague au hasard'
-  };
-  dispatch(addMessage(newMessage));
+export function randomChuckFact(dispatch) {
+  const url = 'https://api.chucknorris.io/jokes/random';
+  axios.get(url).then((response) => {
+    const newMessage = {
+      authorId,
+      message: response.data.value
+    };
+    dispatch(addMessage(newMessage));
+  });
 }
