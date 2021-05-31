@@ -69,6 +69,19 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     paddingBottom: '10px',
     paddingRight: drawerWidth + 50
+  },
+  rootInput: {
+    padding: '2px 4px',
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%'
+  },
+  input: {
+    marginLeft: theme.spacing(1),
+    flex: 1
+  },
+  sendButton: {
+    color: '#0099FF'
   }
 }));
 

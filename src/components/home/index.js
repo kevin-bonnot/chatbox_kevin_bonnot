@@ -1,5 +1,10 @@
 // React/redux
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useCallback,
+  createRef
+} from 'react';
 import { useSelector, connect } from 'react-redux';
 
 // Material imports
@@ -11,9 +16,13 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import TextField from '@material-ui/core/TextField';
+// import TextField from '@material-ui/core/TextField';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+// import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import { IconButton, InputBase } from '@material-ui/core';
+import { Send } from '@material-ui/icons';
 
 // Custom
 import { addMessage } from './actions';
@@ -45,6 +54,7 @@ const Home = (props) => {
   const { history, contacts } = useSelector((state) => state.data);
   const { dispatch } = props;
   let textInput = '';
+  const textInputRef = createRef();
 
   const scroll = () => {
     bottomRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -85,6 +95,7 @@ const Home = (props) => {
   const onSubmit = (e) => {
     e.preventDefault();
     if (textInput !== '') {
+      textInputRef.current.getElementsByTagName('input')[0].value = '';
       dispatch(addMessage({ authorId: 0, message: textInput }));
     }
   };
@@ -127,9 +138,14 @@ const Home = (props) => {
           {history.map((item) => <Message message={item} />)}
         </div>
         <div ref={bottomRef} />
-        <form noValidate autoComplete="off" onSubmit={onSubmit} className={classes.footer}>
-          <TextField id="textfield" label="Votre message ..." variant="outlined" fullWidth onChange={onChangeTextField} />
-        </form>
+        <div className={classes.footer}>
+          <Paper component="form" className={classes.rootInput} onSubmit={onSubmit}>
+            <InputBase placeholder="Your message" onChange={onChangeTextField} className={classes.input} ref={textInputRef} />
+            <IconButton type="submit">
+              <Send className={classes.sendButton} />
+            </IconButton>
+          </Paper>
+        </div>
       </main>
     </div>
   );
