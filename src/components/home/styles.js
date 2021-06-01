@@ -82,6 +82,10 @@ const useStyles = makeStyles((theme) => ({
   },
   sendButton: {
     color: '#0099FF'
+  },
+  avatar: {
+    height: 30,
+    width: 30
   }
 }));
 

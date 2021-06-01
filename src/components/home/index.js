@@ -27,21 +27,38 @@ import { Send } from '@material-ui/icons';
 // Custom
 import { addMessage } from './actions';
 import useStyles from './styles';
-import { getPokemon, helpPokebot } from './bots/pokebot';
-import { helpJot, randomChuckFact } from './bots/jot';
-import { helpBot, getFoodImage } from './bots/bot';
+import { getMove, getPokemon, helpPokebot } from './bots/pokebot';
+import { helpJot, randomChuckFact, randomJoke } from './bots/jot';
+import { helpBot, getFoodImage, getForm } from './bots/bot';
+import getHour from './bots/common';
 
 const Message = ({ message }) => {
   const classes = useStyles();
   if (!message.imageURL) {
     return (
-      <div className={[message.authorId === 0 ? classes.ownMessage : classes.otherMessage, classes.message].join(' ')}>
+      <div className={[message.author.authorId === 0 ? classes.ownMessage : classes.otherMessage, classes.message].join(' ')}>
+        <div>
+          <img className={classes.avatar} src={message.author.avatar} alt="Message" />
+          <div>
+            <strong>{message.author.name}</strong>
+            <br />
+            {message.time}
+          </div>
+        </div>
         {message.message}
       </div>
     );
   }
   return (
-    <div className={[message.authorId === 0 ? classes.ownMessage : classes.otherMessage, classes.message].join(' ')}>
+    <div className={[message.author.authorId === 0 ? classes.ownMessage : classes.otherMessage, classes.message].join(' ')}>
+      <div>
+        <img className={classes.avatar} src={message.author.avatar} alt="Message" />
+        <div>
+          <strong>{message.author.name}</strong>
+          <br />
+          {message.time}
+        </div>
+      </div>
       {message.message}
       <img className={classes.messageImage} src={message.imageURL} alt="Message" />
     </div>
@@ -67,7 +84,7 @@ const Home = (props) => {
   const botActions = useCallback((message) => {
     if (message) {
       const textSplit = message.message.split(' ');
-      if (message.authorId === 0) {
+      if (message.author.authorId === 0) {
         switch (textSplit[0]) {
           case 'help':
             helpPokebot(dispatch);
@@ -82,6 +99,20 @@ const Home = (props) => {
             break;
           case 'food':
             getFoodImage(dispatch);
+            break;
+          case 'form':
+            getForm(dispatch);
+            break;
+          case 'joke':
+            randomJoke(dispatch);
+            break;
+          case 'pokemove':
+            getMove(textSplit, dispatch);
+            break;
+          case 'hour':
+            getHour(dispatch, { id: 1, name: 'pokebot', avatar: 'src/assets/pokeball.png' });
+            getHour(dispatch, { id: 2, name: 'jot', avatar: 'src/assets/chack.jpg' });
+            getHour(dispatch, { id: 3, name: 'bot', avatar: 'src/assets/cheese.png' });
             break;
           default:
             break;
@@ -98,7 +129,8 @@ const Home = (props) => {
     e.preventDefault();
     if (textInput !== '') {
       textInputRef.current.getElementsByTagName('input')[0].value = '';
-      dispatch(addMessage({ authorId: 0, message: textInput }));
+      const date = new Date();
+      dispatch(addMessage({ author: { authorId: 0, name: 'me', avatar: 'src/assets/cheese.png' }, message: textInput, time: `${date.getHours()}:${date.getMinutes()}` }));
     }
   };
 
