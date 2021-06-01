@@ -29,7 +29,7 @@ import { addMessage } from './actions';
 import useStyles from './styles';
 import { getPokemon, helpPokebot } from './bots/pokebot';
 import { helpJot, randomChuckFact } from './bots/jot';
-import { helpBot, doSomething } from './bots/bot';
+import { helpBot, getFoodImage } from './bots/bot';
 
 const Message = ({ message }) => {
   const classes = useStyles();
@@ -65,25 +65,27 @@ const Home = (props) => {
   }, [history]);
 
   const botActions = useCallback((message) => {
-    const textSplit = message.message.split(' ');
-    if (message.authorId === 0) {
-      switch (textSplit[0]) {
-        case 'help':
-          helpPokebot(dispatch);
-          helpJot(dispatch);
-          helpBot(dispatch);
-          break;
-        case 'pokemon':
-          getPokemon(textSplit, dispatch);
-          break;
-        case 'fact':
-          randomChuckFact(dispatch);
-          break;
-        case 'doSomething':
-          doSomething(dispatch);
-          break;
-        default:
-          break;
+    if (message) {
+      const textSplit = message.message.split(' ');
+      if (message.authorId === 0) {
+        switch (textSplit[0]) {
+          case 'help':
+            helpPokebot(dispatch);
+            helpJot(dispatch);
+            helpBot(dispatch);
+            break;
+          case 'pokemon':
+            getPokemon(textSplit, dispatch);
+            break;
+          case 'fact':
+            randomChuckFact(dispatch);
+            break;
+          case 'food':
+            getFoodImage(dispatch);
+            break;
+          default:
+            break;
+        }
       }
     }
   }, [dispatch]);
