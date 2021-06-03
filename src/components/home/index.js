@@ -130,7 +130,7 @@ const Home = (props) => {
     if (textInput !== '') {
       textInputRef.current.getElementsByTagName('input')[0].value = '';
       const date = new Date();
-      dispatch(addMessage({ author: { authorId: 0, name: 'me', avatar: 'src/assets/cheese.png' }, message: textInput, time: `${date.getHours()}:${date.getMinutes()}` }));
+      dispatch(addMessage({ author: { authorId: 0, name: 'me', avatar: 'src/assets/cheese.png' }, message: textInput, time: `${date.getHours()}:${date.getMinutes() >= 10 ? '' : '0'}${date.getMinutes()}` }));
     }
   };
 

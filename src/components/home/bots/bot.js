@@ -10,7 +10,7 @@ export function helpBot(dispatch) {
   const newMessage = {
     author,
     message: 'I have 3 commands : "food" displays a random food picture, "form" displays a random form name and "hour" display the current time',
-    time: `${date.getHours()}:${date.getMinutes()}`
+    time: `${date.getHours()}:${date.getMinutes() >= 10 ? '' : '0'}${date.getMinutes()}`
   };
   dispatch(addMessage(newMessage));
 }
@@ -23,7 +23,7 @@ export function getFoodImage(dispatch) {
       author,
       message: 'Random food picture',
       imageURL: response.data.image,
-      time: `${date.getHours()}:${date.getMinutes()}`
+      time: `${date.getHours()}:${date.getMinutes() >= 10 ? '' : '0'}${date.getMinutes()}`
     };
     dispatch(addMessage(newMessage));
   });
@@ -35,7 +35,7 @@ export function getForm(dispatch) {
   const newMessage = {
     author,
     message: forms[ranNumber],
-    time: `${date.getHours()}:${date.getMinutes()}`
+    time: `${date.getHours()}:${date.getMinutes() >= 10 ? '' : '0'}${date.getMinutes()}`
   };
   dispatch(addMessage(newMessage));
 }

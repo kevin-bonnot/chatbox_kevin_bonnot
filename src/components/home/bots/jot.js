@@ -8,7 +8,7 @@ export function helpJot(dispatch) {
   const newMessage = {
     author,
     message: 'I have 3 commands : "joke" displays a random joke, "fact" displays a random Chuck Norris Fact and "hour" display the current time',
-    time: `${date.getHours()}:${date.getMinutes()}`
+    time: `${date.getHours()}:${date.getMinutes() >= 10 ? '' : '0'}${date.getMinutes()}`
   };
   dispatch(addMessage(newMessage));
 }
@@ -20,7 +20,7 @@ export function randomChuckFact(dispatch) {
     const newMessage = {
       author,
       message: response.data.value,
-      time: `${date.getHours()}:${date.getMinutes()}`
+      time: `${date.getHours()}:${date.getMinutes() >= 10 ? '' : '0'}${date.getMinutes()}`
     };
     dispatch(addMessage(newMessage));
   });
@@ -33,12 +33,12 @@ export function randomJoke(dispatch) {
     const newMessage1 = {
       author,
       message: response.data.setup,
-      time: `${date.getHours()}:${date.getMinutes()}`
+      time: `${date.getHours()}:${date.getMinutes() >= 10 ? '' : '0'}${date.getMinutes()}`
     };
     const newMessage2 = {
       author,
       message: response.data.punchline,
-      time: `${date.getHours()}:${date.getMinutes()}`
+      time: `${date.getHours()}:${date.getMinutes() >= 10 ? '' : '0'}${date.getMinutes()}`
     };
     dispatch(addMessage(newMessage1));
     setTimeout(() => dispatch(addMessage(newMessage2)), 1000);
