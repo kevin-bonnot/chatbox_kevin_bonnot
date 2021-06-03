@@ -3,9 +3,15 @@ import { actionsType } from './actions';
 const initialState = {
   history: [],
   contacts: [
-    { id: 1, name: 'pokebot', isBot: true },
-    { id: 2, name: 'jot', isBot: true },
-    { id: 3, name: 'bot', isBot: true }
+    {
+      id: 1, name: 'pokebot', isBot: true, avatar: '/src/assets/pokeball.png'
+    },
+    {
+      id: 2, name: 'jot', isBot: true, avatar: '/src/assets/chuck.jpg'
+    },
+    {
+      id: 3, name: 'bot', isBot: true, avatar: '/src/assets/cheese.png'
+    }
   ]
 };
 

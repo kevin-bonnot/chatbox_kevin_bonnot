@@ -7,21 +7,20 @@ import React, {
 } from 'react';
 import { useSelector, connect } from 'react-redux';
 
-// Material imports
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+// Material imports=
 import AppBar from '@material-ui/core/AppBar';
+import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
+import IconButton from '@material-ui/core/IconButton';
+import InputBase from '@material-ui/core/InputBase';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
-// import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-// import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import { IconButton, InputBase } from '@material-ui/core';
 import { Send } from '@material-ui/icons';
 
 // Custom
@@ -38,10 +37,10 @@ const Message = ({ message }) => {
     return (
       <div className={[message.author.authorId === 0 ? classes.ownMessage : classes.otherMessage, classes.message].join(' ')}>
         <div>
-          <img className={classes.avatar} src={message.author.avatar} alt="Message" />
           <div>
+            <Avatar alt={message.author.name} src={message.author.avatar} />
             <strong>{message.author.name}</strong>
-            <br />
+            {' at '}
             {message.time}
           </div>
         </div>
@@ -52,10 +51,10 @@ const Message = ({ message }) => {
   return (
     <div className={[message.author.authorId === 0 ? classes.ownMessage : classes.otherMessage, classes.message].join(' ')}>
       <div>
-        <img className={classes.avatar} src={message.author.avatar} alt="Message" />
         <div>
+          <Avatar alt={message.author.name} src={message.author.avatar} />
           <strong>{message.author.name}</strong>
-          <br />
+          {' at '}
           {message.time}
         </div>
       </div>
@@ -130,7 +129,7 @@ const Home = (props) => {
     if (textInput !== '') {
       textInputRef.current.getElementsByTagName('input')[0].value = '';
       const date = new Date();
-      dispatch(addMessage({ author: { authorId: 0, name: 'me', avatar: 'src/assets/cheese.png' }, message: textInput, time: `${date.getHours()}:${date.getMinutes() >= 10 ? '' : '0'}${date.getMinutes()}` }));
+      dispatch(addMessage({ author: { authorId: 0, name: 'me', avatar: 'src/assets/avatar.jpg' }, message: textInput, time: `${date.getHours()}:${date.getMinutes() >= 10 ? '' : '0'}${date.getMinutes()}` }));
     }
   };
 
@@ -160,7 +159,9 @@ const Home = (props) => {
           <List>
             {contacts.map((contact) => (
               <ListItem button key={contact.id}>
-                <ListItemIcon><AccountCircleIcon /></ListItemIcon>
+                <ListItemAvatar>
+                  <Avatar alt={contact.name} src={contact.avatar} />
+                </ListItemAvatar>
                 <ListItemText primary={contact.name} />
               </ListItem>
             ))}
